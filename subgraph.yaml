@@ -1,6 +1,6 @@
 specVersion: 0.0.2
-description: Honeyswap is a decentralized protocol for automated token exchange on xdai.
-repository: https://github.com/1hive/honeyswap-v2-subgraph
+description: SparkSwap Subgraph.
+repository: https://github.com/sparkpointio/sparkswap-v2-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
