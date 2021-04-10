@@ -3,14 +3,25 @@ import { Pair, Token, Bundle } from '../types/schema'
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts/index'
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD } from './helpers'
 
-const WXDAI_ADDRESS = '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
+const WBNB_ADDRESS = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
 
 export function getEthPriceInUSD(): BigDecimal {
   return ONE_BD
 }
 
 // token where amounts should contribute to tracked volume and liquidity
-let WHITELIST: string[] = []
+let WHITELIST: string[] = [
+  '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // WBNB
+  '0xe9e7cea3dedca5984780bafc599bd69add087d56', // BUSD
+  '0x55d398326f99059ff775485246999027b3197955', // USDT
+  '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d', // USDC
+  '0x23396cf899ca06c4472205fc903bdb4de249d6fc', // UST
+  '0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3', // DAI
+  '0x4bd17003473389a42daf6a0a729f6fdb328bbbd7', // VAI
+  '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c', // BTCB
+  '0x2170ed0880ac9a755fd29b2688956bd959f933f8', // WETH
+  '0x250632378e573c6be1ac2f97fcdf00515d0aa91b', // BETH
+]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
 let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('400000')
@@ -23,7 +34,7 @@ let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('2')
  * @todo update to be derived ETH (add stablecoin estimates)
  **/
 export function findEthPerToken(token: Token): BigDecimal {
-  if (token.id == WXDAI_ADDRESS) {
+  if (token.id == WBNB_ADDRESS) {
     return ONE_BD
   }
 
