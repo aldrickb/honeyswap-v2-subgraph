@@ -14,6 +14,10 @@ import {
 } from './helpers'
 
 export function handleNewPair(event: PairCreated): void {
+  let BLACKLIST: string[] = [
+    "0xfae613ada8caf15c13c9c45138a262e814daa71f"
+  ]
+
   // load factory (create if first exchange)
   let factory = UniswapFactory.load(FACTORY_ADDRESS)
   if (factory == null) {
@@ -107,8 +111,10 @@ export function handleNewPair(event: PairCreated): void {
   PairTemplate.create(event.params.pair)
 
   // save updated values
-  token0.save()
-  token1.save()
-  pair.save()
-  factory.save()
+  if (!BLACKLIST.includes(event.params.pair.toHexString().toLowerCase())){
+    token0.save()
+    token1.save()
+    pair.save()
+    factory.save()
+  }
 }
