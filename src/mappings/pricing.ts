@@ -4,9 +4,23 @@ import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts/index'
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD } from './helpers'
 
 const WBNB_ADDRESS = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+const BNB_SRKB_PAIR = "0xD581CdF609DD50fbaa25118583c6EE31b39662F9";
+const BUSD_WBNB_PAIR = "0x9185611a0f7607041b778740De4BeC64e325e186";
 
 export function getEthPriceInUSD(): BigDecimal {
-  return ONE_BD
+  
+  let bnbPair = Pair.load(BNB_SRKB_PAIR); // usdt is token0
+  let busdPair = Pair.load(BUSD_WBNB_PAIR); // busd is token1
+
+  if (bnbPair !== null && busdPair !== null ) {
+    let BNBtoSRKB = bnbPair.reserve1.times(ONE_BD).div(bnbPair.reserve0);
+    let SRKBtoUSD = busdPair.reserve1.times(BNBtoSRKB).div(busdPair.reserve0);
+
+    return SRKBtoUSD;
+  }
+  else{
+    return ONE_BD
+  }
 }
 
 // token where amounts should contribute to tracked volume and liquidity
