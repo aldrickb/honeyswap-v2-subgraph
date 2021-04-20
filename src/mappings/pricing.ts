@@ -37,6 +37,10 @@ let WHITELIST: string[] = [
   '0x250632378e573c6be1ac2f97fcdf00515d0aa91b', // BETH
 ]
 
+let STABLECOINS: string[] = [
+  '0xe9e7cea3dedca5984780bafc599bd69add087d56', // BUSD
+]
+
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
 let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('400000')
 
@@ -50,6 +54,18 @@ let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('2')
 export function findEthPerToken(token: Token): BigDecimal {
   if (token.id == WBNB_ADDRESS) {
     return ONE_BD
+  }
+
+  if (STABLECOINS.includes(token.id)){
+    let bnbPair = Pair.load(BNB_SRKB_PAIR); // usdt is token0
+    let busdPair = Pair.load(BUSD_WBNB_PAIR); // busd is token1
+
+    if (bnbPair !== null && busdPair !== null ) {
+      let USDtoSRKB = busdPair.reserve0.div(busdPair.reserve1);
+      let SRKBtoBNB = bnbPair.reserve0.times(USDtoSRKB).div(bnbPair.reserve1);
+
+      return SRKBtoBNB;
+    }
   }
 
   // loop through whitelist and check if paired with any
