@@ -1,4 +1,4 @@
-import { PairHourData } from './../types/schema'
+// import { PairHourData } from './../types/schema'
 /* eslint-disable prefer-const */
 import { BigInt, BigDecimal, store, Address } from '@graphprotocol/graph-ts'
 import {
@@ -6,9 +6,9 @@ import {
   Token,
   UniswapFactory,
   Transaction,
-  UniswapDayData,
-  PairDayData,
-  TokenDayData,
+  // UniswapDayData,
+  // PairDayData,
+  // TokenDayData,
   Mint as MintEvent,
   Burn as BurnEvent,
   Swap as SwapEvent,
@@ -492,11 +492,16 @@ export function handleSwap(event: Swap): void {
   transaction.save()
 
   // update day entities
-  updatePairDayData(event)
-  updatePairHourData(event)
-  updateUniswapDayData(event)
-  updateTokenDayData(token0 as Token, event)
-  updateTokenDayData(token1 as Token, event)
+  // updatePairDayData(event)
+  // updatePairHourData(event)
+  // updateUniswapDayData(event)
+  // updateTokenDayData(token0 as Token, event)
+  // updateTokenDayData(token1 as Token, event)
+  let pairDayData = updatePairDayData(event)
+  let pairHourData = updatePairHourData(event)
+  let uniswapDayData = updateUniswapDayData(event)
+  let token0DayData = updateTokenDayData(token0 as Token, event)
+  let token1DayData = updateTokenDayData(token1 as Token, event)
 
   let timestamp = event.block.timestamp.toI32()
   // daily info
@@ -514,21 +519,21 @@ export function handleSwap(event: Swap): void {
     .concat(BigInt.fromI32(hourID).toString())
 
   // swap specific updating
-  let uniswapDayData = UniswapDayData.load(dayID.toString())
+  // let uniswapDayData = UniswapDayData.load(dayID.toString())
   uniswapDayData.dailyVolumeUSD = uniswapDayData.dailyVolumeUSD.plus(trackedAmountUSD)
   uniswapDayData.dailyVolumeETH = uniswapDayData.dailyVolumeETH.plus(trackedAmountETH)
   uniswapDayData.dailyVolumeUntracked = uniswapDayData.dailyVolumeUntracked.plus(derivedAmountUSD)
   uniswapDayData.save()
 
   // swap specific updating for pair
-  let pairDayData = PairDayData.load(dayPairID)
+  // let pairDayData = PairDayData.load(dayPairID)
   pairDayData.dailyVolumeToken0 = pairDayData.dailyVolumeToken0.plus(amount0Total)
   pairDayData.dailyVolumeToken1 = pairDayData.dailyVolumeToken1.plus(amount1Total)
   pairDayData.dailyVolumeUSD = pairDayData.dailyVolumeUSD.plus(trackedAmountUSD)
   pairDayData.save()
 
   // update hourly pair data
-  let pairHourData = PairHourData.load(hourPairID)
+  // let pairHourData = PairHourData.load(hourPairID)
   pairHourData.hourlyVolumeToken0 = pairHourData.hourlyVolumeToken0.plus(amount0Total)
   pairHourData.hourlyVolumeToken1 = pairHourData.hourlyVolumeToken1.plus(amount1Total)
   pairHourData.hourlyVolumeUSD = pairHourData.hourlyVolumeUSD.plus(trackedAmountUSD)
@@ -539,7 +544,7 @@ export function handleSwap(event: Swap): void {
     .toString()
     .concat('-')
     .concat(BigInt.fromI32(dayID).toString())
-  let token0DayData = TokenDayData.load(token0DayID)
+  // let token0DayData = TokenDayData.load(token0DayID)
   token0DayData.dailyVolumeToken = token0DayData.dailyVolumeToken.plus(amount0Total)
   token0DayData.dailyVolumeETH = token0DayData.dailyVolumeETH.plus(amount0Total.times(token1.derivedETH as BigDecimal))
   token0DayData.dailyVolumeUSD = token0DayData.dailyVolumeUSD.plus(
@@ -552,8 +557,8 @@ export function handleSwap(event: Swap): void {
     .toString()
     .concat('-')
     .concat(BigInt.fromI32(dayID).toString())
-  let token1DayData = TokenDayData.load(token1DayID)
-  token1DayData = TokenDayData.load(token1DayID)
+  // let token1DayData = TokenDayData.load(token1DayID)
+  // token1DayData = TokenDayData.load(token1DayID)
   token1DayData.dailyVolumeToken = token1DayData.dailyVolumeToken.plus(amount1Total)
   token1DayData.dailyVolumeETH = token1DayData.dailyVolumeETH.plus(amount1Total.times(token1.derivedETH as BigDecimal))
   token1DayData.dailyVolumeUSD = token1DayData.dailyVolumeUSD.plus(
