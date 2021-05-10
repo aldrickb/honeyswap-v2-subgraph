@@ -23,6 +23,8 @@ export function getEthPriceInUSD(): BigDecimal {
   }
 }
 
+
+
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
   '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // WBNB
@@ -35,6 +37,9 @@ let WHITELIST: string[] = [
   '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c', // BTCB
   '0x2170ed0880ac9a755fd29b2688956bd959f933f8', // WETH
   '0x250632378e573c6be1ac2f97fcdf00515d0aa91b', // BETH
+  '0x37Ac4D6140e54304D77437A5c11924f61a2D976f', // SFUEL
+  '0x14b1166ab53a237c8ceaee2bbc4bbca200cb7da8', // bSRK
+  '0xc3440c10c4f36f354eb591b19fafb4906d449b75', // SRKb
 ]
 
 let STABLECOINS: string[] = [
